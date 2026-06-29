@@ -1,0 +1,8 @@
+dash
+dash-ag-grid
+plotly
+pandas
+numpy
+scikit-learn
+requests
+openpyxl
