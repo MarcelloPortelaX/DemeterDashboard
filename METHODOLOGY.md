@@ -1,7 +1,46 @@
 # Notas metodológicas
 
-O volume pode ser estimado por `área basal × altura × fator de forma` quando a coluna de volume não estiver preenchida. Para aplicações técnicas, devem ser adotadas equações ajustadas à espécie, região, idade e manejo.
+## Volume
 
-A cadeia exploratória de carbono considera volume, densidade da madeira, fator de expansão de biomassa, biomassa radicular, fração de carbono e conversão de carbono para CO₂e. O módulo de cenário aplica baseline, leakage, buffer de risco e incerteza; ele não gera créditos certificados.
+Quando `Volume_m3` está ausente, o sistema utiliza:
 
-Os modelos estatísticos são auxiliares. Registros sinalizados, previsões e agrupamentos precisam ser interpretados em conjunto com conhecimento técnico e validação de campo.
+```text
+Volume = área basal × altura × fator de forma
+```
+
+A área basal individual é calculada por:
+
+```text
+g = π × (DAP / 200)²
+```
+
+## Estrutura
+
+- **Dq:** raiz quadrada da média dos DAPs ao quadrado.
+- **Altura dominante:** média das alturas associadas aos 20% maiores DAPs.
+- **Altura de Lorey:** altura ponderada pela área basal.
+- **IVI:** soma da densidade relativa, dominância relativa e frequência relativa.
+- **Shannon e Simpson:** indicadores de diversidade florística.
+
+## Biomassa e carbono
+
+```text
+Volume × densidade = biomassa do fuste
+Biomassa do fuste × BEF = biomassa acima do solo
+Biomassa acima do solo × razão raiz/parte aérea = biomassa de raízes
+Biomassa total × fração de carbono = carbono
+Carbono × 44/12 = CO₂e
+```
+
+## Crescimento
+
+O IMA e o ICA são aproximações tabulares baseadas nos volumes agrupados por
+idade. Não substituem parcelas permanentes nem modelos de crescimento ajustados.
+
+## IA
+
+- Isolation Forest: triagem de registros atípicos.
+- Random Forest / Extra Trees: regressão exploratória de volume.
+- K-Means: agrupamento de talhões por similaridade.
+
+Os modelos devem ser validados antes de qualquer decisão operacional.

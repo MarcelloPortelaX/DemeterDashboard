@@ -1,0 +1,29 @@
+{
+  "name": "Demeter Dashboard Pro Restaurado",
+  "repository": "https://github.com/MarcelloPortelaX/demeter-dashboard",
+  "local_port": 8051,
+  "root_bat_files": [
+    "ABRIR_DEMETER.bat",
+    "PUBLICAR_NO_GITHUB.bat"
+  ],
+  "tabs": [
+    "Resumo",
+    "Inventário",
+    "Estrutura",
+    "Carbono",
+    "Crescimento",
+    "Espacial",
+    "Qualidade",
+    "IA",
+    "Clima",
+    "Dados"
+  ],
+  "exports": [
+    "CSV",
+    "XLSX multi-sheet",
+    "HTML",
+    "template CSV"
+  ],
+  "ux_revision": "hierarquia progressiva, 6 KPIs, barra de dados compacta, títulos únicos, tabelas expansíveis",
+  "version": "pro-ux-2026-07-14"
+}

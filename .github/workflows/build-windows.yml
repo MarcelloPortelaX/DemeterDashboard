@@ -1,28 +1,69 @@
 name: Gerar executável Windows
+
 on:
   workflow_dispatch:
   push:
-    tags: ["v*"]
+    branches: [main]
+    paths:
+      - "app.py"
+      - "demeter/**"
+      - "assets/**"
+      - "data/**"
+      - "requirements.txt"
+      - "requirements-dev.txt"
+      - "tests/**"
+      - "demeter_dashboard.spec"
+      - "packaging/**"
+      - ".github/workflows/build-windows.yml"
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
+          cache: "pip"
+
       - name: Instalar dependências
+        shell: pwsh
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt pyinstaller
-      - name: Gerar pasta portátil
-        run: pyinstaller --noconfirm --clean demeter_dashboard.spec
-      - name: Compactar
-        shell: powershell
-        run: Compress-Archive -Path dist\DemeterDashboard\* -DestinationPath DemeterDashboard-Windows.zip
-      - uses: actions/upload-artifact@v4
+          python -m pip install -r requirements.txt
+          python -m pip install -r requirements-dev.txt
+
+      - name: Validar código
+        shell: pwsh
+        run: |
+          python -m py_compile app.py
+          Get-ChildItem demeter\*.py | ForEach-Object { python -m py_compile $_.FullName }
+
+      - name: Executar testes
+        shell: pwsh
+        run: |
+          python -m pytest -q
+
+      - name: Gerar versão portátil
+        shell: pwsh
+        run: |
+          python -m PyInstaller --noconfirm --clean demeter_dashboard.spec
+          Copy-Item README.md dist\DemeterDashboard\README.md
+          Copy-Item METHODOLOGY.md dist\DemeterDashboard\METHODOLOGY.md
+          Copy-Item UX_REFERENCIAS.md dist\DemeterDashboard\UX_REFERENCIAS.md
+          Compress-Archive -Path dist\DemeterDashboard\* -DestinationPath DemeterDashboard-Windows.zip -Force
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
         with:
           name: DemeterDashboard-Windows
           path: DemeterDashboard-Windows.zip
+          if-no-files-found: error
           retention-days: 30
