@@ -56,8 +56,7 @@ jobs:
         run: |
           python -m PyInstaller --noconfirm --clean demeter_dashboard.spec
           Copy-Item README.md dist\DemeterDashboard\README.md
-          Copy-Item METHODOLOGY.md dist\DemeterDashboard\METHODOLOGY.md
-          Copy-Item UX_REFERENCIAS.md dist\DemeterDashboard\UX_REFERENCIAS.md
+          Copy-Item NOTICE.md dist\DemeterDashboard\NOTICE.md
           Compress-Archive -Path dist\DemeterDashboard\* -DestinationPath DemeterDashboard-Windows.zip -Force
 
       - name: Publicar artefato
